@@ -11,7 +11,10 @@ public class Application : IHostedService
 
     public Application(IConfiguration configuration)
     {
-        _applicationOptions = configuration.GetSection("Application").Get<ApplicationOptions>();
+        _applicationOptions = configuration.GetSection(ApplicationOptions.Application).Get<ApplicationOptions>();
+
+        if (_applicationOptions == null)
+            throw new ArgumentNullException(nameof(_applicationOptions));
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
