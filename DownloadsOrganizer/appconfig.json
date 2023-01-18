@@ -1,8 +1,9 @@
 {
   "Application": {
-    "SourceFolder": "C:\\Users\\gusta\\Downloads\\Unsorted",
+    "SourceFolder": [
+      "C:\\Users\\gusta\\Downloads\\Unsorted"
+    ],
     "OutputFolder": "C:\\Users\\gusta\\Downloads"
-
   },
   "Categorization": {
     "IgnoreFolderNames": [
