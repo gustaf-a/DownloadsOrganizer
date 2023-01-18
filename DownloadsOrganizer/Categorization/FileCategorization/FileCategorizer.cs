@@ -1,32 +1,29 @@
-﻿using DownloadsOrganizer.Configuration;
+﻿using DownloadsOrganizer.Categorization.CategoriesHolder;
 using DownloadsOrganizer.Data;
-using Microsoft.Extensions.Configuration;
 
 namespace DownloadsOrganizer.Categorization.FileCategorization;
 
 public class FileCategorizer : IFileCategorizer
 {
-    private readonly CategorizationOptions _categorizationOptions;
+    private readonly ICategoriesHolder _categoriesHolder;
 
-    public FileCategorizer(IConfiguration configuration)
+    public FileCategorizer(ICategoriesHolder categoriesHolder)
     {
-        _categorizationOptions = configuration.GetSection(CategorizationOptions.Categorization)
-                                              .Get<CategorizationOptions>();
-
-        if (_categorizationOptions == null)
-            throw new ArgumentNullException(nameof(_categorizationOptions));
+        _categoriesHolder = categoriesHolder;
     }
 
     public CategorizedFile Categorize(SourceFile file)
     {
         var categorizedFile = new CategorizedFile(file);
 
-        foreach (var category in _categorizationOptions.Categories)
+        foreach (var category in _categoriesHolder.GetCategories())
             if (category.FileExtensions.Contains(file.FileExtension))
             {
                 categorizedFile.Category = category;
-                break;
+                return categorizedFile;
             }
+
+        categorizedFile.Category = _categoriesHolder.GetUnknownCategory();
 
         return categorizedFile;
     }

@@ -1,46 +1,20 @@
-﻿using DownloadsOrganizer.Data;
+﻿using DownloadsOrganizer.Categorization.CategoriesHolder;
 using DownloadsOrganizer.Categorization.FileCategorization;
-using Microsoft.Extensions.Configuration;
+using DownloadsOrganizer.Data;
+using Moq;
 
 namespace DownloadsOrganizerUnitTests.Categorization.FileCategorization;
 
 public class FileCategorizerTests
 {
-    private readonly IConfiguration _configuration;
-
-    public FileCategorizerTests()
-    {
-        using var memoryStream = new MemoryStream();
-        using var writer = new StreamWriter(memoryStream);
-        writer.Write(
-            @"{
-                    ""Categorization"": {
-                        ""Categories"": [
-                            {
-                                ""Name"": ""Ebooks"",
-                                ""FileExtensions"": [""epub"",""mobi"",""pdf"",""odt""]
-                            },
-                            {
-                                ""Name"": ""Audiobooks"",
-                                ""FileExtensions"": [""mp3"",""m4a"",""m4b""]
-                            }
-                        ]
-                    }
-                }");
-
-        writer.Flush();
-        memoryStream.Position = 0;
-
-        _configuration = new ConfigurationBuilder()
-            .AddJsonStream(memoryStream)
-            .Build();
-    }
-
     [Fact]
     public void Categorize_WithFileExtension_ReturnsEmptyCategorizedData()
     {
         // Arrange
-        var categorizer = new FileCategorizer(_configuration);
+        var categoriesHolderMock = new Mock<ICategoriesHolder>();
+        categoriesHolderMock.Setup(c => c.GetCategories()).Returns(new List<Category>());
+
+        var categorizer = new FileCategorizer(categoriesHolderMock.Object);
 
         var sourceFile = new SourceFile($"C:\\Test\\test");
 
@@ -56,14 +30,19 @@ public class FileCategorizerTests
     [InlineData("test.epub", "Ebooks")]
     [InlineData("test.mobi", "Ebooks")]
     [InlineData("test.pdf", "Ebooks")]
-    [InlineData("test.odt", "Ebooks")]
-    [InlineData("test.mp3", "Audiobooks")]
     [InlineData("test.m4a", "Audiobooks")]
     [InlineData("test.m4b", "Audiobooks")]
     public void Categorize_WithKnownFileExtension_GivesCorrectCategory(string fileName, string expectedCategory)
     {
         // Arrange
-        var categorizer = new FileCategorizer(_configuration);
+        var categoriesHolderMock = new Mock<ICategoriesHolder>();
+        categoriesHolderMock.Setup(c => c.GetCategories()).Returns(new List<Category>
+        {
+            new Category(){ Name = "Ebooks", FileExtensions = new List<string> { "epub", "mobi", "pdf" }},
+            new Category(){ Name = "Audiobooks", FileExtensions = new List<string> { "m4a", "m4b" }},
+        });
+
+        var categorizer = new FileCategorizer(categoriesHolderMock.Object);
 
         var sourceFile = new SourceFile($"C:\\Test\\{fileName}");
 
@@ -86,7 +65,14 @@ public class FileCategorizerTests
     public void Categorize_WithUnknownFileExtension_GivesNoCategory(string fileName)
     {
         // Arrange
-        var categorizer = new FileCategorizer(_configuration);
+        var categoriesHolderMock = new Mock<ICategoriesHolder>();
+        categoriesHolderMock.Setup(c => c.GetCategories()).Returns(new List<Category>
+        {
+            new Category(){ Name = "Ebooks", FileExtensions = new List<string> { "epub", "mobi", "pdf" }},
+            new Category(){ Name = "Audiobooks", FileExtensions = new List<string> { "m4a", "m4b" }},
+        });
+
+        var categorizer = new FileCategorizer(categoriesHolderMock.Object);
 
         var sourceFile = new SourceFile($"C:\\Test\\{fileName}");
 
