@@ -1,0 +1,82 @@
+{
+  "Application": {
+    "SourceFolder": "C:\\Users\\gusta\\Downloads\\Unsorted",
+    "OutputFolder": "C:\\Users\\gusta\\Downloads"
+
+  },
+  "Categorization": {
+    "IgnoreFolderNames": [
+      "temp"
+    ],
+    "IgnorePrefixes": [
+      "_"
+    ],
+    "IgnoreFileNames": [
+      "desktop.ini"
+    ],
+    "IgnoreFileExtensions": [
+      "tmp",
+      "part",
+      "parts",
+      "torrent",
+    ],
+    "Categories": [
+      {
+        "Name": "Movies",
+        "FileExtensions": [
+          "avi",
+          "mkv",
+          "mp4",
+          "m4v",
+          "mov",
+          "wmv",
+          "flv",
+          "mpg",
+          "mpeg",
+          "m2ts",
+          "ts",
+          "vob",
+          "iso",
+          "rm",
+          "rmvb",
+          "divx",
+          "xvid",
+          "3gp",
+          "3g2",
+          "webm",
+          "ogm",
+          "ogv"
+      },
+      {
+        "Name": "Ebooks",
+        "FileExtensions": [
+          "epub",
+          "mobi",
+          "pdf",
+          "odt"
+        ]
+      },
+      {
+        "Name": "Audiobooks",
+        "FileExtensions": [
+          
+          "mp3",
+          "m4a",
+          "m4b"
+        ]
+      },
+      {
+        "Name": "Music",
+        "FileExtensions": [
+          "mp3",
+          "flac",
+          "wav",
+          "wma",
+          "m4a",
+          "aac",
+          "ogg"
+        ]
+      }
+    ]
+  }
+}
