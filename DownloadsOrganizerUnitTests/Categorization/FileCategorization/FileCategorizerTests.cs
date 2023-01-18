@@ -46,7 +46,7 @@ public class FileCategorizerTests
 
         // Act
         var categorizedFile = categorizer.Categorize(sourceFile);
-        
+
         // Assert
         Assert.Null(categorizedFile.Category);
         Assert.False(categorizedFile.HasCategory);
@@ -92,7 +92,7 @@ public class FileCategorizerTests
 
         // Act
         var categorizedFile = categorizer.Categorize(sourceFile);
-        
+
         // Assert
         Assert.False(categorizedFile.HasCategory);
         Assert.Null(categorizedFile.Category);

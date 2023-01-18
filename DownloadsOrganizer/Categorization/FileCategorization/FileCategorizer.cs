@@ -6,7 +6,7 @@ namespace DownloadsOrganizer.Categorization.FileCategorization;
 
 public class FileCategorizer : IFileCategorizer
 {
-    private CategorizationOptions _categorizationOptions;
+    private readonly CategorizationOptions _categorizationOptions;
 
     public FileCategorizer(IConfiguration configuration)
     {
@@ -16,7 +16,7 @@ public class FileCategorizer : IFileCategorizer
         if (_categorizationOptions == null)
             throw new ArgumentNullException(nameof(_categorizationOptions));
     }
-    
+
     public CategorizedFile Categorize(SourceFile file)
     {
         var categorizedFile = new CategorizedFile(file);
