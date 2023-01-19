@@ -2,14 +2,15 @@
 
 public class SourceData
 {
-    public SourceData(string rootPath)
+    public SourceData(List<string> rootPaths)
     {
-        RootPath = rootPath;
+        RootPaths = rootPaths;
 
         SourceFiles = new();
         SourceFolders = new();
     }
-    public string RootPath { get; }
+    
+    public List<string> RootPaths { get; }
 
     public List<SourceFile> SourceFiles { get; set; }
     public List<SourceFolder> SourceFolders { get; set; }
