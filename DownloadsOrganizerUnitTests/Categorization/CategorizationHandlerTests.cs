@@ -12,7 +12,7 @@ public class CategorizationHandlerTests
     public void Categorize_WithEmptySourceData_ReturnsEmptyCategorizedData()
     {
         // Arrange
-        var sourceData = new SourceData(@"C:\test");
+        var sourceData = new SourceData(new() { @"C:\test" });
 
         var fileCategorizer = new Mock<IFileCategorizer>();
         var folderCategorizer = new Mock<IFolderCategorizer>();
@@ -32,7 +32,7 @@ public class CategorizationHandlerTests
         // Arrange
         var sourceFile = new SourceFile(@"C:\test\file.txt");
 
-        var sourceData = new SourceData(@"C:\test")
+        var sourceData = new SourceData(new() { @"C:\test" })
         {
             SourceFiles = new List<SourceFile> { sourceFile }
         };
@@ -60,7 +60,7 @@ public class CategorizationHandlerTests
         // Arrange
         var sourceFolder = new SourceFolder(@"C:\test\folder");
 
-        var sourceData = new SourceData(@"C:\test")
+        var sourceData = new SourceData(new() { @"C:\test" })
         {
             SourceFolders = new List<SourceFolder> { sourceFolder }
         };
@@ -72,7 +72,7 @@ public class CategorizationHandlerTests
                          .Returns(new CategorizedFolder(sourceFolder));
 
         var categorizationHandler = new CategorizationHandler(fileCategorizer.Object, folderCategorizer.Object);
-        
+
         // Act
         var categorizedData = categorizationHandler.Categorize(sourceData);
 
