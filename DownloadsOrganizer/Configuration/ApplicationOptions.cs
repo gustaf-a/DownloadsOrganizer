@@ -8,6 +8,4 @@ public class ApplicationOptions
     public string OutputFolder { get; set; } = string.Empty;
 
     public string CategoryFolderPrefix { get; set; } = "_";
-
-    
 }

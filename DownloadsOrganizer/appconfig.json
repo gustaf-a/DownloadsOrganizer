@@ -9,17 +9,20 @@
     "IgnoreFolderNames": [
       "temp"
     ],
-    "IgnorePrefixes": [
+    "IgnoreFolderPrefixes": [
       "_"
     ],
     "IgnoreFileNames": [
       "desktop.ini"
     ],
+    "IgnoreFilePrefixes": [
+      "_"
+    ],
     "IgnoreFileExtensions": [
       "tmp",
       "part",
       "parts",
-      "torrent",
+      "torrent"
     ],
     "Categories": [
       {
@@ -60,7 +63,7 @@
       {
         "Name": "Audiobooks",
         "FileExtensions": [
-          
+
           "mp3",
           "m4a",
           "m4b"
