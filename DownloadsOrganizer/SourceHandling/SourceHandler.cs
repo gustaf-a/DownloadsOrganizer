@@ -69,7 +69,49 @@ public class SourceHandler : ISourceHandler
             if (FolderShouldBeIgnored(folder))
                 continue;
 
-            sourceData.SourceFolders.Add(new SourceFolder(folder));
+            var sourceFolder = new SourceFolder(folder);
+
+            AddContainedFiles(sourceFolder);
+
+            AddContainedFolders(sourceFolder);
+
+            sourceData.SourceFolders.Add(sourceFolder);
+        }
+    }
+
+    private void AddContainedFolders(SourceFolder sourceFolder)
+    {
+        var containedFolders = _directoryReader.GetDirectories(sourceFolder.FolderPath);
+        if (containedFolders.Length > 0)
+        {
+            foreach (var containedFolder in containedFolders)
+            {
+                if (FolderShouldBeIgnored(containedFolder))
+                {
+                    sourceFolder.HasIgnoredContent = true;
+                    continue;
+                }
+
+                sourceFolder.ContainedFolders.Add(new SourceFolder(containedFolder));
+            }
+        }
+    }
+
+    private void AddContainedFiles(SourceFolder sourceFolder)
+    {
+        var containedFiles = _directoryReader.GetFiles(sourceFolder.FolderPath);
+        if (containedFiles.Length > 0)
+        {
+            foreach (var file in containedFiles)
+            {
+                if (FileShouldBeIgnored(file))
+                {
+                    sourceFolder.HasIgnoredContent = true;
+                    continue;
+                }
+
+                sourceFolder.ContainedFiles.Add(new SourceFile(file));
+            }
         }
     }
 
