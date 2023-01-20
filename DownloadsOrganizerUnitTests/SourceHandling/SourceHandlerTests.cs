@@ -168,8 +168,8 @@ public class SourceHandlerTests
         // Assert
         Assert.Empty(result.SourceFiles);
         Assert.Equal(2, result.SourceFolders.Count);
-        Assert.Equal(directories[0], result.SourceFolders[0].Path);
-        Assert.Equal(directories[1], result.SourceFolders[1].Path);
+        Assert.Equal(directories[0], result.SourceFolders[0].FolderPath);
+        Assert.Equal(directories[1], result.SourceFolders[1].FolderPath);
     }
 
     [Fact]
@@ -194,8 +194,8 @@ public class SourceHandlerTests
         // Assert
         Assert.Empty(result.SourceFiles);
         Assert.Equal(2, result.SourceFolders.Count);
-        Assert.Equal(directories[0], result.SourceFolders[0].Path);
-        Assert.Equal(directories[3], result.SourceFolders[1].Path);
+        Assert.Equal(directories[0], result.SourceFolders[0].FolderPath);
+        Assert.Equal(directories[3], result.SourceFolders[1].FolderPath);
     }
 
     [Fact]
@@ -220,7 +220,7 @@ public class SourceHandlerTests
         // Assert
         Assert.Empty(result.SourceFiles);
         Assert.Equal(2, result.SourceFolders.Count);
-        Assert.Equal(directories[0], result.SourceFolders[0].Path);
-        Assert.Equal(directories[3], result.SourceFolders[1].Path);
+        Assert.Equal(directories[0], result.SourceFolders[0].FolderPath);
+        Assert.Equal(directories[3], result.SourceFolders[1].FolderPath);
     }
 }

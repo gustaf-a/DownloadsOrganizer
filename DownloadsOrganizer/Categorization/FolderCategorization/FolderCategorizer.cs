@@ -20,7 +20,7 @@ public class FolderCategorizer : IFolderCategorizer
     {
         var categorizedFolder = new CategorizedFolder(sourceFolder);
 
-        if (sourceFolder.ContainedFiles.Count == 0)
+        if (sourceFolder.IsEmpty())
         {
             categorizedFolder.Category = _categoriesHolder.GetEmptyCategory();
             return categorizedFolder;
@@ -75,7 +75,4 @@ public class FolderCategorizer : IFolderCategorizer
 
     private static Category MostCommonCategory(Dictionary<Category, int> categoriesByOccurence)
         => categoriesByOccurence.Keys.First();
-
-   
-
 }

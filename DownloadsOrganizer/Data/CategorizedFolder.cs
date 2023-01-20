@@ -15,4 +15,7 @@ public class CategorizedFolder
 
     public Category Category { get; set; }
     public bool HasCategory { get => Category != null; }
+
+    public string FolderPath { get => SourceFolder.FolderPath; }
+    public string FolderName { get => SourceFolder.FolderName; }
 }
