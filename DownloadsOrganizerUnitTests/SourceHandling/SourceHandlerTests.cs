@@ -1,56 +1,30 @@
-﻿using DownloadsOrganizer.IO;
+﻿using DownloadsOrganizer.Configuration;
+using DownloadsOrganizer.IO;
 using DownloadsOrganizer.SourceHandling;
-using Microsoft.Extensions.Configuration;
 using Moq;
 
 namespace DownloadsOrganizerUnitTests.SourceHandling;
 
 public class SourceHandlerTests
 {
-    private readonly IConfiguration _configuration;
+    private readonly Mock<IConfigurationHandler> _configurationHandlerMock;
 
     public SourceHandlerTests()
     {
-        using var memoryStream = new MemoryStream();
-        using var writer = new StreamWriter(memoryStream);
-        writer.Write(
-            @"{
-                ""Application"": {
-                    ""SourceFolder"": [
-                        ""C:\\Users\\TestUser\\Downloads\\Unsorted""
-                    ],
-                    ""OutputFolder"": ""C:\\Users\\TestUser\\Downloads""
-                    },
-                ""Categorization"": {
-                    ""IgnoreFolderNames"": [
-                        ""temp"",
-                        ""notTempButAlmost""           
-                    ],
-                    ""IgnoreFolderPrefixes"": [
-                        ""_"",
-                        ""%""
-                    ],
-                    ""IgnoreFileNames"": [
-                        ""hiddenfile.txt"",
-                        ""DownloadsOrganizer.exe"",
-                    ],
-                    ""IgnoreFilePrefixes"": [
-                        ""&"",
-                        ""#""
-                    ],
-                    ""IgnoreFileExtensions"": [
-                        ""tmp"",
-                        ""part""
-                    ],
-                }
-            }");
-
-        writer.Flush();
-        memoryStream.Position = 0;
-
-        _configuration = new ConfigurationBuilder()
-            .AddJsonStream(memoryStream)
-            .Build();
+        _configurationHandlerMock = new Mock<IConfigurationHandler>();
+        _configurationHandlerMock.Setup(c => c.ApplicationOptions()).Returns(new ApplicationOptions
+        {
+            SourceFolder = new string[] { "C:\\Users\\TestUser\\Downloads\\Unsorted" },
+            OutputFolder = "C:\\Users\\TestUser\\Downloads"
+        });
+        _configurationHandlerMock.Setup(c => c.CategorizationOptions()).Returns(new CategorizationOptions
+        {
+            IgnoreFolderNames = new string[] { "temp", "notTempButAlmost" },
+            IgnoreFolderPrefixes = new string[] { "_", "%" },
+            IgnoreFileNames = new string[] { "hiddenfile.txt", "DownloadsOrganizer.exe" },
+            IgnoreFilePrefixes = new string[] { "&", "#" },
+            IgnoreFileExtensions = new string[] { "tmp", "part" }
+        });
     }
 
     [Fact]
@@ -58,8 +32,8 @@ public class SourceHandlerTests
     {
         // Arrange
         var directoryReaderMock = new Mock<IDirectoryReader>();
-
-        var sourceHandler = new SourceHandler(_configuration, directoryReaderMock.Object);
+        
+        var sourceHandler = new SourceHandler(_configurationHandlerMock.Object, directoryReaderMock.Object);
 
         // Act
         var result = sourceHandler.GetSourceData();
@@ -82,7 +56,7 @@ public class SourceHandlerTests
         var directoryReaderMock = new Mock<IDirectoryReader>();
         directoryReaderMock.Setup(dr => dr.GetFiles(It.IsAny<string>())).Returns(files);
 
-        var sourceHandler = new SourceHandler(_configuration, directoryReaderMock.Object);
+        var sourceHandler = new SourceHandler(_configurationHandlerMock.Object, directoryReaderMock.Object);
 
         // Act
         var result = sourceHandler.GetSourceData();
@@ -110,7 +84,7 @@ public class SourceHandlerTests
         var directoryReaderMock = new Mock<IDirectoryReader>();
         directoryReaderMock.Setup(dr => dr.GetFiles(It.IsAny<string>())).Returns(files);
 
-        var sourceHandler = new SourceHandler(_configuration, directoryReaderMock.Object);
+        var sourceHandler = new SourceHandler(_configurationHandlerMock.Object, directoryReaderMock.Object);
 
         // Act
         var result = sourceHandler.GetSourceData();
@@ -136,7 +110,7 @@ public class SourceHandlerTests
         var directoryReaderMock = new Mock<IDirectoryReader>();
         directoryReaderMock.Setup(dr => dr.GetFiles(It.IsAny<string>())).Returns(files);
 
-        var sourceHandler = new SourceHandler(_configuration, directoryReaderMock.Object);
+        var sourceHandler = new SourceHandler(_configurationHandlerMock.Object, directoryReaderMock.Object);
 
         // Act
         var result = sourceHandler.GetSourceData();
@@ -162,7 +136,7 @@ public class SourceHandlerTests
         var directoryReaderMock = new Mock<IDirectoryReader>();
         directoryReaderMock.Setup(dr => dr.GetFiles(It.IsAny<string>())).Returns(files);
 
-        var sourceHandler = new SourceHandler(_configuration, directoryReaderMock.Object);
+        var sourceHandler = new SourceHandler(_configurationHandlerMock.Object, directoryReaderMock.Object);
 
         // Act
         var result = sourceHandler.GetSourceData();
@@ -186,7 +160,7 @@ public class SourceHandlerTests
         var directoryReaderMock = new Mock<IDirectoryReader>();
         directoryReaderMock.Setup(dr => dr.GetDirectories(It.IsAny<string>())).Returns(directories);
 
-        var sourceHandler = new SourceHandler(_configuration, directoryReaderMock.Object);
+        var sourceHandler = new SourceHandler(_configurationHandlerMock.Object, directoryReaderMock.Object);
 
         // Act
         var result = sourceHandler.GetSourceData();
@@ -212,7 +186,7 @@ public class SourceHandlerTests
         var directoryReaderMock = new Mock<IDirectoryReader>();
         directoryReaderMock.Setup(dr => dr.GetDirectories(It.IsAny<string>())).Returns(directories);
 
-        var sourceHandler = new SourceHandler(_configuration, directoryReaderMock.Object);
+        var sourceHandler = new SourceHandler(_configurationHandlerMock.Object, directoryReaderMock.Object);
 
         // Act
         var result = sourceHandler.GetSourceData();
@@ -238,7 +212,7 @@ public class SourceHandlerTests
         var directoryReaderMock = new Mock<IDirectoryReader>();
         directoryReaderMock.Setup(dr => dr.GetDirectories(It.IsAny<string>())).Returns(directories);
 
-        var sourceHandler = new SourceHandler(_configuration, directoryReaderMock.Object);
+        var sourceHandler = new SourceHandler(_configurationHandlerMock.Object, directoryReaderMock.Object);
 
         // Act
         var result = sourceHandler.GetSourceData();

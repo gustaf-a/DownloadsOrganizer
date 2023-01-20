@@ -1,7 +1,6 @@
 ﻿using DownloadsOrganizer.Configuration;
 using DownloadsOrganizer.Data;
 using DownloadsOrganizer.IO;
-using Microsoft.Extensions.Configuration;
 
 namespace DownloadsOrganizer.SourceHandling;
 
@@ -12,20 +11,20 @@ public class SourceHandler : ISourceHandler
 
     private readonly IDirectoryReader _directoryReader;
 
-    public SourceHandler(IConfiguration configuration, IDirectoryReader directoryReader)
+    public SourceHandler(IConfigurationHandler configurationHandler, IDirectoryReader directoryReader)
     {
-        _applicationOptions = configuration.GetSection(ApplicationOptions.Application).Get<ApplicationOptions>();
-        _categorizationOptions = configuration.GetSection(CategorizationOptions.Categorization).Get<CategorizationOptions>();
-
-        if ((_applicationOptions.SourceFolder.Length == 0)
-            || string.IsNullOrWhiteSpace(_applicationOptions.OutputFolder))
-            throw new ArgumentNullException(nameof(_applicationOptions));
+        _applicationOptions = configurationHandler.ApplicationOptions();
+        _categorizationOptions = configurationHandler.CategorizationOptions();
 
         _directoryReader = directoryReader;
     }
 
     public SourceData GetSourceData()
     {
+        if ((_applicationOptions.SourceFolder.Length == 0)
+            || string.IsNullOrWhiteSpace(_applicationOptions.OutputFolder))
+            throw new ArgumentNullException(nameof(_applicationOptions));
+
         var sourceData = new SourceData(_applicationOptions.SourceFolder.ToList());
 
         foreach (var rootPath in sourceData.RootPaths)

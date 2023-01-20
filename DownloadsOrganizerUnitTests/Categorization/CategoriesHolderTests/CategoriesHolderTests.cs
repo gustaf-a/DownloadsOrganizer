@@ -1,45 +1,40 @@
-﻿using Microsoft.Extensions.Configuration;
-using DownloadsOrganizer.Categorization.CategoriesHolder;
+﻿using DownloadsOrganizer.Categorization.CategoriesHolder;
+using DownloadsOrganizer.Configuration;
+using Moq;
+using DownloadsOrganizer.Data;
 
 namespace DownloadsOrganizerUnitTests.Categorization.CategoriesHolderTests;
 
 public class CategoriesHolderTests
 {
-    private readonly IConfiguration _configuration;
+    private readonly Mock<IConfigurationHandler> _configurationHandlerMock;
 
     public CategoriesHolderTests()
     {
-        using var memoryStream = new MemoryStream();
-        using var writer = new StreamWriter(memoryStream);
-        writer.Write(
-            @"{
-                    ""Categorization"": {
-                        ""Categories"": [
-                            {
-                                ""Name"": ""Ebooks"",
-                                ""FileExtensions"": [""epub"",""mobi"",""pdf"",""odt""]
-                            },
-                            {
-                                ""Name"": ""Audiobooks"",
-                                ""FileExtensions"": [""mp3"",""m4a"",""m4b""]
-                            }
-                        ]
-                    }
-                }");
-
-        writer.Flush();
-        memoryStream.Position = 0;
-
-        _configuration = new ConfigurationBuilder()
-            .AddJsonStream(memoryStream)
-            .Build();
+        _configurationHandlerMock = new Mock<IConfigurationHandler>();
+        _configurationHandlerMock.Setup(c => c.CategorizationOptions()).Returns(new CategorizationOptions
+        {
+            Categories = new Category[]
+            {
+                new Category
+                {
+                    Name = "Ebooks",
+                    FileExtensions = new List<string> { "epub", "mobi", "pdf", "odt" }
+                },
+                new Category
+                {
+                    Name = "Audiobooks",
+                    FileExtensions = new List<string> { "mp3", "m4a", "m4b" }
+                }
+            },
+        });
     }
 
     [Fact]
     public void GetCategories_ReturnsCategories()
     {
         // Arrange
-        var categoriesHolder = new CategoriesHolder(_configuration);
+        var categoriesHolder = new CategoriesHolder(_configurationHandlerMock.Object);
 
         // Act
         var categories = categoriesHolder.GetCategories();
@@ -54,7 +49,7 @@ public class CategoriesHolderTests
     public void GetEmptyCategory_ReturnsEmptyCategory()
     {
         // Arrange
-        var categoriesHolder = new CategoriesHolder(_configuration);
+        var categoriesHolder = new CategoriesHolder(_configurationHandlerMock.Object);
 
         // Act
         var emptyCategory = categoriesHolder.GetEmptyCategory();
@@ -68,7 +63,7 @@ public class CategoriesHolderTests
     public void GetUnknownCategory_ReturnsUnknownCategory()
     {
         // Arrange
-        var categoriesHolder = new CategoriesHolder(_configuration);
+        var categoriesHolder = new CategoriesHolder(_configurationHandlerMock.Object);
 
         // Act
         var unknownCategory = categoriesHolder.GetUnknownCategory();

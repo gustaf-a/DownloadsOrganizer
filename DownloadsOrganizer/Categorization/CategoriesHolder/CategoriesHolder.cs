@@ -1,6 +1,5 @@
 ﻿using DownloadsOrganizer.Configuration;
 using DownloadsOrganizer.Data;
-using Microsoft.Extensions.Configuration;
 
 namespace DownloadsOrganizer.Categorization.CategoriesHolder;
 
@@ -15,15 +14,9 @@ public class CategoriesHolder : ICategoriesHolder
 
     private readonly Category _unknownCategory;
 
-    public CategoriesHolder(IConfiguration configuration)
+    public CategoriesHolder(IConfigurationHandler configurationHandler)
     {
-        var categorizationOptions = configuration.GetSection(CategorizationOptions.Categorization)
-                                      .Get<CategorizationOptions>();
-
-        if (categorizationOptions == null)
-            throw new ArgumentNullException(nameof(CategorizationOptions));
-
-        _categories = categorizationOptions.Categories.ToList();
+        _categories = configurationHandler.CategorizationOptions().Categories.ToList();
 
         _emptyCategory = new Category
         {
